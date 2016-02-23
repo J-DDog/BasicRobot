@@ -1,7 +1,12 @@
 package bot.model;
 
+import lejos.robotics.chassis.Wheel;
+import lejos.robotics.chassis.WheeledChassis;
 import lejos.robotics.navigation.MovePilot;
 import lejos.hardware.lcd.LCD;
+import lejos.hardware.motor.Motor;
+import lejos.hardware.sensor.EV3TouchSensor;
+import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.utility.Delay;
 
 public class EV3Bot {
@@ -10,7 +15,10 @@ public class EV3Bot {
 	private int xPosition;
 	private int yPosition;
 	private long waitTime;
+	
 	private MovePilot botPilot;
+	private EV3UltrasonicSensor distanceSensor;
+	private EV3TouchSensor ackTouch;
 	
 	public EV3Bot()
 	{
@@ -26,8 +34,10 @@ public class EV3Bot {
 
 
 	private void setupPilot() {
-		// TODO Auto-generated method stub
-		
+		Wheel leftWheel = WheeledChassis.modelWheel(Motor.A, 43.3).offset(-72);
+		Wheel rightWheel = WheeledChassis.modelWheel(Motor.A, 43.3).offset(-72);
+		WheeledChassis chassis = new WheeledChassis(new Wheel[]{leftWheel, rightWheel}, WheeledChassis.TYPE_DIFFERENTIAL);
+		botPilot = new MovePilot(chassis);
 	}
 
 	public void driveRoom()
@@ -39,13 +49,14 @@ public class EV3Bot {
 	private void displayMessage() 
 	{
 		LCD.drawString(botMessage, xPosition, yPosition);
+		Delay.msDelay(waitTime);
 		//Delay
 	}
 	
-	private void displayMessage(String string) 
+	private void displayMessage(String message) 
 	{
-		
-		
+		LCD.drawString(message, xPosition, yPosition);
+		Delay.msDelay(waitTime);
 	}
 	
 }
