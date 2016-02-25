@@ -15,6 +15,7 @@ public class EV3Bot {
 	private int xPosition;
 	private int yPosition;
 	private long waitTime;
+	private float[] ultrasonicSamples;
 	
 	private MovePilot botPilot;
 	private EV3UltrasonicSensor distanceSensor;
@@ -22,7 +23,7 @@ public class EV3Bot {
 	
 	public EV3Bot()
 	{
-		this.botMessage = "Jared codes jaredBot";
+		this.botMessage = "Jared codes JohnBot";
 		this.xPosition = 50;
 		this.yPosition = 50;
 		this.waitTime = 4000;
@@ -43,6 +44,18 @@ public class EV3Bot {
 	public void driveRoom()
 	{
 		displayMessage("driveRoom");
+		
+		ultrasonicSamples = new float [distanceSensor.sampleSize()];
+		distanceSensor.fetchSample(ultrasonicSamples, 0);
+		if(ultrasonicSamples[0] < 2.3) 
+		{
+			botPilot.travel(20.00);
+			
+		}
+		else
+		{
+			botPilot.travel(254.00);
+		}
 	}
 
 	
