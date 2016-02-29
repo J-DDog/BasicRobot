@@ -34,7 +34,8 @@ public class EV3Bot {
 	
 
 
-	private void setupPilot() {
+	private void setupPilot() 
+	{
 		Wheel leftWheel = WheeledChassis.modelWheel(Motor.A, 43.3).offset(-72);
 		Wheel rightWheel = WheeledChassis.modelWheel(Motor.A, 43.3).offset(-72);
 		WheeledChassis chassis = new WheeledChassis(new Wheel[]{leftWheel, rightWheel}, WheeledChassis.TYPE_DIFFERENTIAL);
