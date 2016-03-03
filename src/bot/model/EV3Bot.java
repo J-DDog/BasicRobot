@@ -41,8 +41,8 @@ public class EV3Bot {
 
 	private void setupPilot() 
 	{
-		Wheel leftWheel = WheeledChassis.modelWheel(Motor.A, 43.3).offset(72);
-		Wheel rightWheel = WheeledChassis.modelWheel(Motor.B, 43.3).offset(-72);
+		Wheel leftWheel = WheeledChassis.modelWheel(Motor.A, 43.3).offset(-72);
+		Wheel rightWheel = WheeledChassis.modelWheel(Motor.B, 43.3).offset(72);
 		WheeledChassis chassis = new WheeledChassis(new Wheel[]{leftWheel, rightWheel}, WheeledChassis.TYPE_DIFFERENTIAL);
 		botPilot = new MovePilot(chassis);
 	}
@@ -67,23 +67,23 @@ public class EV3Bot {
 		
 		if(true) //From back of Room
 		{
-			botPilot.rotate(10);
+			botPilot.rotate(-10);
 			botPilot.travel(3810);
-			botPilot.rotate(50);
+			botPilot.rotate(-50);
 			botPilot.travel(5000);
-			botPilot.rotate(-60);
-			botPilot.travel(3048);
 			botPilot.rotate(60);
+			botPilot.travel(3048);
+			botPilot.rotate(-60);
 			botPilot.travel(600);
 		}
 		else //From Front of Room
 		{
 			botPilot.travel(500);
-			botPilot.rotate(-60);
-			botPilot.travel(3048);
 			botPilot.rotate(60);
-			botPilot.travel(5100);
+			botPilot.travel(3048);
 			botPilot.rotate(-60);
+			botPilot.travel(5100);
+			botPilot.rotate(60);
 			botPilot.travel(3810);
 			
 		}
@@ -94,9 +94,19 @@ public class EV3Bot {
 	{
 		for(int repeats = 3; repeats > 0; repeats--)
 		{
-			botPilot.rotate(10);
-			botPilot.rotate(-10);
-			botPilot.rotate(360);
+			
+			if(repeats%2 == 1)
+			{
+				botPilot.rotate(10);
+				botPilot.rotate(-10);
+				botPilot.rotate(360);
+			}
+			else
+			{
+				botPilot.rotate(-10);
+				botPilot.rotate(10);
+				botPilot.rotate(-360);
+			}
 			
 		}
 		
