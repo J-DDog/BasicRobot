@@ -65,7 +65,7 @@ public class EV3Bot {
 //			botPilot.travel(254.00);
 //		}
 		
-		if(true) //From back of Room
+		if(false) //From back of Room
 		{
 			botPilot.rotate(-10);
 			botPilot.travel(3810);
@@ -78,7 +78,7 @@ public class EV3Bot {
 		}
 		else //From Front of Room
 		{
-			botPilot.travel(500);
+			botPilot.travel(400);
 			botPilot.rotate(60);
 			botPilot.travel(3048);
 			botPilot.rotate(-60);
@@ -115,6 +115,7 @@ public class EV3Bot {
 	
 	private void displayMessage() 
 	{
+		LCD.clearDisplay();
 		LCD.drawString(botMessage, xPosition, yPosition);
 		Delay.msDelay(waitTime);
 		//Delay
@@ -122,6 +123,7 @@ public class EV3Bot {
 	
 	private void displayMessage(String message) 
 	{
+		LCD.clearDisplay();
 		LCD.drawString(message, xPosition, yPosition);
 		Delay.msDelay(waitTime);
 	}
