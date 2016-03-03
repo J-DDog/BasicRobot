@@ -24,9 +24,9 @@ public class EV3Bot {
 	
 	public EV3Bot()
 	{
-		this.botMessage = "Jared codes JohnBot";
-		this.xPosition = 50;
-		this.yPosition = -50;
+		this.botMessage = "Jared code JohnBot";
+		this.xPosition = 1;
+		this.yPosition = 2;
 		this.waitTime = 4000;
 		
 		distanceSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S1"));
