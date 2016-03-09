@@ -63,19 +63,6 @@ public class EV3Bot {
 	{
 		displayMessage("driveRoom");
 		
-		ultrasonicSamples = new float [distanceSensor.sampleSize()];
-		distanceSensor.fetchSample(ultrasonicSamples, 0);
-		
-//		if(ultrasonicSamples[0] < 2.3) 
-//		{
-//			botPilot.travel(20.00);
-//			
-//		}
-//		else
-//		{
-//			botPilot.travel(254.00);
-//		}
-		
 		if(false) //From back of Room
 		{
 			botPilot.rotate(-10);
@@ -104,21 +91,23 @@ public class EV3Bot {
 	public void driveRoomRand()
 	{
 		ultrasonicSamples = new float [distanceSensor.sampleSize()];
-		distanceSensor.fetchSample(ultrasonicSamples, 0);
 		
 		while(state != State.STOP)
 		{
 			
-			switch(this.state)
+			switch(state)
 			{
 				case DRIVE:
 					displayMessage("Drive");
+					
 					//If there is something in the way then change states to avoid
-					if(ultrasonicSamples[0] < .2) 
+					if(checkSensor(.5)) 
 					{
 						//If the robot is moving stop
+						displayMessage("If 1");
 						if(botPilot.isMoving())
 						{
+							displayMessage("If 2");
 							botPilot.stop();
 						}
 						state = State.AVOID;
@@ -126,25 +115,26 @@ public class EV3Bot {
 					}
 					else//If it's clear drive forward
 					{
+						displayMessage("Else 1");
 						if(!botPilot.isMoving())
 						{
+							displayMessage("If 3");
 							botPilot.forward();
 						}
 					}
+					displayMessage("Break");
 					break;
 					
 				case AVOID:
 					displayMessage("Avoid");
 					//Turn to the right and check if there is something in the way
 					botPilot.rotate(60);
-					distanceSensor.fetchSample(ultrasonicSamples, 0);
 					
 					//if there is something is in the way turn around.
-					if(ultrasonicSamples[0] < .2)
+					if(checkSensor(.5))
 					{
 						botPilot.rotate(-120);
-						distanceSensor.fetchSample(ultrasonicSamples, 0);
-						if(ultrasonicSamples[0] < .2)
+						if(checkSensor(.5))
 						{
 							//Turn around and give up
 							botPilot.rotate(-60);
@@ -154,8 +144,7 @@ public class EV3Bot {
 						{
 							botPilot.travel(200);
 							botPilot.rotate(60);
-							distanceSensor.fetchSample(ultrasonicSamples, 0);
-							if(ultrasonicSamples[0] < .2)
+							if(checkSensor(.5))
 							{
 								//Turn around and give up
 								botPilot.rotate(120);
@@ -174,8 +163,7 @@ public class EV3Bot {
 						botPilot.travel(200);
 						//Turn to pas it and check if its still there
 						botPilot.rotate(-60);
-						distanceSensor.fetchSample(ultrasonicSamples, 0);
-						if(ultrasonicSamples[0] < .2)
+						if(checkSensor(.5))
 						{
 							//turn around and give up
 							botPilot.rotate(120);
@@ -190,12 +178,14 @@ public class EV3Bot {
 					}
 					break;
 			}
-			distanceSensor.fetchSample(ultrasonicSamples, 0);
+			displayMessage("Wait");
 			thisBot.getKeys();
 			if(thisBot.getKeys().waitForAnyPress() == Keys.ID_ESCAPE)
 			{
+				displayMessage("Wait 1");
 				state = State.STOP;
 			}
+			
 		}
 		
 	}
@@ -203,7 +193,7 @@ public class EV3Bot {
 	
 	
 	public void danceTime()
-	{
+	{    
 		displayMessage("DANCE TIME™");
 		
 		for(int repeats = 3; repeats > 0; repeats--)
@@ -226,6 +216,17 @@ public class EV3Bot {
 		
 	}
 	
+	private boolean checkSensor(double distance)
+	{
+		boolean isClear = true;
+		displayMessage("Distance Check");
+		distanceSensor.fetchSample(ultrasonicSamples, 0);
+		if(ultrasonicSamples[0] < distance)
+		{
+			isClear = false;
+		}
+		return isClear;
+	}
 	
 	private void displayMessage() 
 	{
