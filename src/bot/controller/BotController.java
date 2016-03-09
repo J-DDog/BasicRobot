@@ -19,8 +19,9 @@ public class BotController
 	
 	public void start()
 	{
-		sillyBot.driveRoom();
-
+		//sillyBot.driveRoom();
+		sillyBot.driveRoomRand();
+		//sillyBot.danceTime();
 	}
 	
 }
