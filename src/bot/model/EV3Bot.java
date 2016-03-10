@@ -1,5 +1,6 @@
 package bot.model;
 
+import bot.model.DataExchange.EV3State;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
 import lejos.robotics.navigation.MovePilot;
@@ -14,25 +15,20 @@ import lejos.utility.Delay;
 
 public class EV3Bot {
 	
-	public enum State
-	{
-		DRIVE, AVOID, LOADING, STOP
-	}
-	
 	private String botMessage;
 	private int xPosition;
 	private int yPosition;
 	private long waitTime;
 	private float[] ultrasonicSamples;
-	private State state;
 	
+	private DataExchange DE;
 	private MovePilot botPilot;
 	private EV3UltrasonicSensor distanceSensor;
-	private EV3 thisBot;
 	private EV3TouchSensor backTouch;
 	
-	public EV3Bot()
+	public EV3Bot(DataExchange DE)
 	{
+		this.DE = DE;
 		this.botMessage = "Jared code JohnBot";
 		this.xPosition = 1;
 		this.yPosition = 2;
@@ -41,8 +37,6 @@ public class EV3Bot {
 		distanceSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S1"));
 		distanceSensor.getDistanceMode();
 		backTouch = new EV3TouchSensor(LocalEV3.get().getPort("S2"));
-		thisBot = LocalEV3.get();
-		state = State.DRIVE;
 		
 		setupPilot();
 		displayMessage();
@@ -92,10 +86,10 @@ public class EV3Bot {
 	{
 		ultrasonicSamples = new float [distanceSensor.sampleSize()];
 		
-		while(state != State.STOP)
+		while(DE.getEV3State() != EV3State.STOP)
 		{
 			
-			switch(state)
+			switch(DE.getEV3State())
 			{
 				case DRIVE:
 					displayMessage("Drive");
@@ -104,25 +98,20 @@ public class EV3Bot {
 					if(checkSensor(.5)) 
 					{
 						//If the robot is moving stop
-						displayMessage("If 1");
 						if(botPilot.isMoving())
 						{
-							displayMessage("If 2");
 							botPilot.stop();
 						}
-						state = State.AVOID;
+						DE.setEV3State(EV3State.AVOID);
 						
 					}
 					else//If it's clear drive forward
 					{
-						displayMessage("Else 1");
 						if(!botPilot.isMoving())
 						{
-							displayMessage("If 3");
 							botPilot.forward();
 						}
 					}
-					displayMessage("Break");
 					break;
 					
 				case AVOID:
@@ -138,7 +127,7 @@ public class EV3Bot {
 						{
 							//Turn around and give up
 							botPilot.rotate(-60);
-							state = State.DRIVE;
+							DE.setEV3State(EV3State.DRIVE);
 						}
 						else
 						{
@@ -148,12 +137,12 @@ public class EV3Bot {
 							{
 								//Turn around and give up
 								botPilot.rotate(120);
-								state = State.DRIVE;
+								DE.setEV3State(EV3State.DRIVE);
 							}
 							else
 							{
 								//Continue on its way
-								state = State.DRIVE;
+								DE.setEV3State(EV3State.DRIVE);
 							}
 						}
 					}
@@ -167,30 +156,24 @@ public class EV3Bot {
 						{
 							//turn around and give up
 							botPilot.rotate(120);
-							state = State.DRIVE;
+							DE.setEV3State(EV3State.DRIVE);
 						}
 						else
 						{
 							//Start going
-							state = State.DRIVE;
+							DE.setEV3State(EV3State.DRIVE);
 						}
 						
 					}
 					break;
-			}
-			displayMessage("Wait");
-			thisBot.getKeys();
-			if(thisBot.getKeys().waitForAnyPress() == Keys.ID_ESCAPE)
-			{
-				displayMessage("Wait 1");
-				state = State.STOP;
+				default:
+					break;
+					
 			}
 			
 		}
 		
 	}
-
-	
 	
 	public void danceTime()
 	{    
