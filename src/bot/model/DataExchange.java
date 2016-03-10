@@ -8,6 +8,7 @@ public class DataExchange
 		DRIVE, AVOID, LOADING, STOP
 	}
 	
+	private boolean finished = false;
 	private boolean exitClicked = false;
 	private EV3State state = EV3State.DRIVE;
 	
@@ -31,6 +32,16 @@ public class DataExchange
 	public EV3State getEV3State()
 	{
 		return state;
+	}
+	
+	public void finish()
+	{
+		this.finished = true;
+	}
+	
+	public boolean getFinished()
+	{
+		return finished;
 	}
 	
 }

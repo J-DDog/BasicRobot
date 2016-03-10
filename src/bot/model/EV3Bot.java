@@ -13,7 +13,8 @@ import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.utility.Delay;
 
-public class EV3Bot {
+public class EV3Bot extends Thread
+{
 	
 	private String botMessage;
 	private int xPosition;
@@ -24,7 +25,6 @@ public class EV3Bot {
 	private DataExchange DE;
 	private MovePilot botPilot;
 	private EV3UltrasonicSensor distanceSensor;
-	private EV3TouchSensor backTouch;
 	
 	public EV3Bot(DataExchange DE)
 	{
@@ -36,13 +36,17 @@ public class EV3Bot {
 		
 		distanceSensor = new EV3UltrasonicSensor(LocalEV3.get().getPort("S1"));
 		distanceSensor.getDistanceMode();
-		backTouch = new EV3TouchSensor(LocalEV3.get().getPort("S2"));
 		
 		setupPilot();
 		displayMessage();
 	}
 	
-
+	public void run()
+	{
+		driveRoomRand();
+		danceTime();
+		DE.finish();
+	}
 
 	private void setupPilot() 
 	{
@@ -82,7 +86,7 @@ public class EV3Bot {
 		
 	}
 	
-	public void driveRoomRand()
+	private void driveRoomRand()
 	{
 		ultrasonicSamples = new float [distanceSensor.sampleSize()];
 		
@@ -175,7 +179,7 @@ public class EV3Bot {
 		
 	}
 	
-	public void danceTime()
+	private void danceTime()
 	{    
 		displayMessage("DANCE TIME™");
 		

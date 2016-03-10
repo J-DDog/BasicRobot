@@ -23,6 +23,7 @@ public class EV3ButtonListener extends Thread
 		{
 			DE.setEV3State(EV3State.STOP);
 		}
+		
 	}
 	
 }
