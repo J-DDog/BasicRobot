@@ -106,15 +106,18 @@ public class EV3Bot extends Thread
 						{
 							botPilot.stop();
 						}
-						DE.setEV3State(EV3State.AVOID);
+						if(DE.getEV3State() != EV3State.STOP)
+						{
+							DE.setEV3State(EV3State.AVOID);
+						}
+						
 						
 					}
 					else//If it's clear drive forward
 					{
-						if(!botPilot.isMoving())
-						{
-							botPilot.forward();
-						}
+						
+						botPilot.forward();
+						
 					}
 					break;
 					
@@ -131,7 +134,10 @@ public class EV3Bot extends Thread
 						{
 							//Turn around and give up
 							botPilot.rotate(-60);
-							DE.setEV3State(EV3State.DRIVE);
+							if(DE.getEV3State() != EV3State.STOP)
+							{
+								DE.setEV3State(EV3State.DRIVE);
+							}
 						}
 						else
 						{
@@ -141,12 +147,18 @@ public class EV3Bot extends Thread
 							{
 								//Turn around and give up
 								botPilot.rotate(120);
-								DE.setEV3State(EV3State.DRIVE);
+								if(DE.getEV3State() != EV3State.STOP)
+								{
+									DE.setEV3State(EV3State.DRIVE);
+								}
 							}
 							else
 							{
 								//Continue on its way
-								DE.setEV3State(EV3State.DRIVE);
+								if(DE.getEV3State() != EV3State.STOP)
+								{
+									DE.setEV3State(EV3State.DRIVE);
+								}
 							}
 						}
 					}
@@ -160,11 +172,10 @@ public class EV3Bot extends Thread
 						{
 							//turn around and give up
 							botPilot.rotate(120);
-							DE.setEV3State(EV3State.DRIVE);
+							
 						}
-						else
+						if(DE.getEV3State() != EV3State.STOP)
 						{
-							//Start going
 							DE.setEV3State(EV3State.DRIVE);
 						}
 						
@@ -208,7 +219,7 @@ public class EV3Bot extends Thread
 		boolean isClear = true;
 		displayMessage("Distance Check");
 		distanceSensor.fetchSample(ultrasonicSamples, 0);
-		if(ultrasonicSamples[0] < distance)
+		if(ultrasonicSamples[0] > distance)
 		{
 			isClear = false;
 		}
